@@ -1,0 +1,28 @@
+.container {
+    border: 2px solid red;
+    margin: auto auto;
+    width: 50%;
+    height: 600px;
+    text-align: center;
+    padding-top:20px;
+}
+
+#student-details {
+    border: 2px solid black;
+}
+
+.buttons {
+    margin-top: 50px;
+}
+
+#view {
+    margin-right: 5px;
+}
+
+.display {
+    border: 2px solid green;
+}
+
+.hidden {
+    display: none;
+}
