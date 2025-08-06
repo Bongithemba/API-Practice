@@ -7,6 +7,17 @@
     padding-top:20px;
 }
 
+
+
+table {
+      border-collapse: collapse;
+      width: 50%;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+
 #student-details {
     border: 2px solid black;
 }

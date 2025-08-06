@@ -21,8 +21,13 @@ con.connect(function(err) {
 })
 
 app.get("/", (req, res)=>{
-  res.render('index.ejs'); // because I used locals if/else in the ejs file, I just render the index here
+   con.query("SELECT * FROM students", function (err, result, fields) {
+    if (err) throw err;
+    console.log(result);
+    res.render('index.ejs', {students: result}) // display in table form 
+  });   
 });
+  
 
 app.get("/display", (req, res)=>{ // displays the entire table
     con.query("SELECT * FROM students", function (err, result, fields) {
