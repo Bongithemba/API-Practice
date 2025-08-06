@@ -20,20 +20,28 @@
         
         <div id=""class="buttons">
             <h2>View All students below</h2>
-            <form action="/display" method="GET">
+            <form action="/display" method="GET" id="view">
             <button id="view">View All</button>
             </form><br>
 
-            <form action="/idDisplay" method="GET">
-                <label for="id">Enter ID to view student</label><br>
+            <h2>View student by ID</h2>
+            <form action="/idDisplay" method="GET" id="idDisplay">
+                <label for="id">Enter student ID</label><br>
                 <input name="id">
                 <input type="submit" value="Go">
-            </form><br>
+            </form><br><br>
+            
 
-            <form action="/remove">
-                <label for="id-delete">Enter ID, name or email to delete student</label><br>
-                <input name="id-delete">
-                <input type="submit">
+            <h2>Delete student record</h2>
+            <form action="/remove" method="GET">
+                <p>Delete using:</p>
+                <input type="radio" name="property" value="name">
+                <label for="name">name</label>
+                <input type="radio" name="property" value="email">
+                <label for="email">Email</label><br><br>
+                <label for="id-delete">Enter name or email below</label><br>
+                <input name="id-delete"> 
+                <input type="submit">   
             </form>
         </div><br>
         <div class="display">
@@ -44,8 +52,21 @@
             <% } else { %>
             <p>Welcome to the student portal🤟</p>
             <% } %>
-        </div>
-        <button>Edit Profile</button>
+        </div><br>
+        <h2>Edit student details</h2>
+            <form action="/update" method="post">
+                <p>Edit using:</p>
+                <!-- <input type="radio" name="property" value="name">
+                <label for="name">name</label>
+                <input type="radio" name="property" value="email">
+                <label for="email">Email</label><br><br> -->
+                <label for="id-delete">Enter current name or email below</label><br>
+                <input name="oldValue"><br>
+                <label for="id-delete">Enter new name or email below</label><br>
+                <input name="newValue"> <br> 
+                <input type="submit">   
+            </form>
+        
     </div> 
 
       <div class="modal hidden">

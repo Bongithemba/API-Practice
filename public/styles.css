@@ -2,7 +2,7 @@
     border: 2px solid red;
     margin: auto auto;
     width: 50%;
-    height: 600px;
+    height: 100%;
     text-align: center;
     padding-top:20px;
 }
@@ -21,6 +21,18 @@
 
 .display {
     border: 2px solid green;
+}
+
+#view {
+    border-bottom: 2px solid black;
+}
+
+#idDisplay {
+    border-bottom: 2px solid black;
+}
+
+form {
+    padding-bottom: 10px;
 }
 
 .hidden {
