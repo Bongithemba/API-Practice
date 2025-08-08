@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Student management Interface</title>
     <link href="styles.css" rel="stylesheet">
     <style>
     
@@ -13,30 +13,143 @@
   <div class="container">
     <div class="heading">
       <h1>Student Management</h1>
-      <button>Add New Student</button>
+      <button id="newStudent" onclick="openAddModal()">Add New Student</button>
     </div>
+    <form id="searchField" action="" method="get">
+      <input id="search" type="text" placeholder="search using ID">
+      <input type="submit" value="search">
+    </form>
+   
+  <!-- ****Table**** -->
     <table id="myTable">
       <thead>
         <tr>
           <% if (students.length > 0) { %>
-            <% Object.keys(students[0]).forEach(key => { %>
+            <% Object.keys(students[0]).slice(1).forEach(key => { %>
               <th><%= key %></th>
             <% }); %>
           <% } %>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
         <!-- Table data will be inserted here -->
         <% students.forEach(student => { %>
           <tr>
-            <% Object.values(student).forEach(value => { %>
-              <td><%= value %></td>
+            <% Object.values(student).slice(1).forEach(value => { %>
+              <td id="data"><%= value %></td>
             <% }); %>
+            <td id="options">
+              <span><a href="#" onclick="openViewModal(event)">View</a></span>
+              <span><a href="#">Edit</a></span>
+              <span><a href="#" onclick="openDeleteModal(event, '<%=student.name %>')">Delete</a></span>
+            </td>
           </tr>
         <% }); %>
       </tbody>
     </table>
   </div>
+  <!-- ****End**** -->
+  
+  <!-- Modal to add new student -->
+  <div id="addModal" class="addModal">
+    <div class="addModal-content">
+      <div class="modal-heading">
+        <h2 >Add New Student</h2>
+    </div>
+      <form action="/add" method="post" id="addForm">
+        <label for="name">Name</label><br>
+        <input name="name" required><br><br>
+        <label for="email">Email</label><br>
+        <input name="email" required><br><br>
+        <input type="submit" value="Save" onclick="closeAddModal()">
+      </form>
+    </div>
+  </div>
+  <!-- ****End**** -->
+
+  <!-- Modal to delete student -->
+  <div id="deleteModal" class="deleteModal">
+    <div class="deleteModal-content">
+      <div class="modal-heading">
+        <h2>Confirm Delete</h2>
+      </div>
+      <p id="deleteMessage">Are you sure you want to delete</p>
+      <div>
+        <button onclick="closeDeleteModal()">Cancel</button>
+        <form action="/remove" method="post" id="deleteform">
+          <input type="hidden" name="property" value="name">
+          <input type="hidden" name="id-delete" id="deleteValue">
+          <button type="submit" onclick="closeDeleteModal()">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- ****End**** -->
+
+   <!-- Modal to view student details -->
+  <div id="viewModal" class="viewModal">
+    <div class="viewModal-content">
+      <div class="modal-heading">
+        <h2>Student Details</h2>
+        <span><a href='' onclick="closeViewModal(event)" class="close">Back to list</a></span>
+      </div>
+      <p>Are you sure you want to delete</p>
+    </div>
+  </div>
+  <!-- ****End**** -->
+
+  <script>
+    // open and close add modal
+    function openAddModal(){
+      let addModal = document.getElementById("addModal");
+      addModal.style.display = "block";
+    };
+
+    function closeAddModal(){
+      addModal.style.display = "none";
+    };
+    //end
+
+    // open and close delete modal
+    function openDeleteModal(event, ){
+      event.preventDefault(); //Prevents the link from navigating
+      let deleteModal = document.querySelector(".deleteModal");
+      deleteModal.style.display = "block";
+    }
+
+    function closeDeleteModal(){
+      deleteModal.style.display = "none";
+    }
+    //end
+
+     // open and close view modal
+    function openViewModal(event){
+      event.preventDefault(); //Prevents the link from navigating
+      let viewModal = document.querySelector(".viewModal");
+      viewModal.style.display = "block";
+    }
+
+    function closeViewModal(){
+      viewModal.style.display = "none";
+    }
+    //end
+
+    function openDeleteModal(event, name) {
+      event.preventDefault();
+
+      let deleteModal = document.getElementById("deleteModal");
+      let deleteValueInput = document.getElementById("deleteValue");
+      let deleteMessage = document.getElementById("deleteMessage");
+
+      deleteValueInput.value = name;
+      deleteMessage.textContent = `Are you sure you want to delete "${name}"?`;
+
+      deleteModal.style.display = "block";
+  }
+
+  </script>
+
 </body>
 </html>
 

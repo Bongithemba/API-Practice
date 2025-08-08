@@ -29,7 +29,8 @@ app.get("/", (req, res)=>{
 });
   
 
-app.get("/display", (req, res)=>{ // displays the entire table
+app.post("/display", (req, res)=>{ // displays the entire table
+    let display = req.body;
     con.query("SELECT * FROM students", function (err, result, fields) {
     if (err) throw err;
     console.log(result);
@@ -52,13 +53,13 @@ app.get("/idDisplay", (req, res)=>{ // display row of specific id
 })
 
 app.post("/add", (req, res)=>{ // add student to table
-    let name = req.body['username'];
+    let name = req.body['name'];
     let email = req.body['email']
     let sql = `INSERT INTO students (name, email) VALUES ('${name}', '${email}')`;
     con.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record inserted");
-    res.sendStatus(200);
+    res.redirect('/');
   });
 });
  
@@ -85,17 +86,18 @@ app.post("/update", (req, res)=>{ // update a student's details
 });
 
 
-app.get("/remove", (req, res)=>{ // delete a student's details
-  let property = req.query["property"];
-  let value = req.query["id-delete"];
+app.post("/remove", (req, res)=>{ // delete a student's details
+  let property = req.body["property"];
+  let value = req.body["id-delete"];
 
 
-  let sql = `DELETE FROM students WHERE ${property} = ${value}`;
+  let sql = `DELETE FROM students WHERE ${property} = ${con.escape(value)}`;
   con.query(sql, function (err, result) {
   if (err) throw err;
   console.log("Number of records deleted: " + result.affectedRows);
+  
   });
-  // res.sendStatus(200);
+ res.redirect('/');
 })
 
 app.listen (port, ()=>{ // listening on port 3000
