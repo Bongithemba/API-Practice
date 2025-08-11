@@ -15,8 +15,8 @@
       <h1>Student Management</h1>
       <button id="newStudent" onclick="openAddModal()">Add New Student</button>
     </div>
-    <form id="searchField" action="" method="get">
-      <input id="search" type="text" placeholder="search using ID">
+    <form id="searchField" action="/idDisplay" method="POST">
+      <input id="search" type="text" placeholder="search using ID" name="id">
       <input type="submit" value="search">
     </form>
    
@@ -40,8 +40,18 @@
               <td id="data"><%= value %></td>
             <% }); %>
             <td id="options">
-              <span><a href="#" onclick="openViewModal(event)">View</a></span>
-              <span><a href="#">Edit</a></span>
+              <span><a href="#" onclick="openViewModal(event, { 
+                    id: '<%= student.id %>',
+                    name: '<%= student.name %>',
+                    email: '<%= student.email %>'
+                })">View</a></span>
+              <span>
+                <a href="#" onclick="openEditModal(event, { 
+                    id: '<%= student.id %>',
+                    name: '<%= student.name %>',
+                    email: '<%= student.email %>'
+                })">Edit</a>
+              </span>
               <span><a href="#" onclick="openDeleteModal(event, '<%=student.name %>')">Delete</a></span>
             </td>
           </tr>
@@ -94,10 +104,40 @@
         <h2>Student Details</h2>
         <span><a href='' onclick="closeViewModal(event)" class="close">Back to list</a></span>
       </div>
-      <p>Are you sure you want to delete</p>
+      <div id="viewContent">
+
+      </div>
     </div>
   </div>
   <!-- ****End**** -->
+
+
+  <!-- ****Modal to edit student details**** -->
+   <div id="editModal" class="editModal">
+    <div class="editModal-content">
+      <div class="modal-heading">
+        <h2 >Edit Student Details</h2>
+    </div>
+      
+
+      <form action="/update" method="post" id="editForm">
+        <!-- current values *hidden* -->
+        <input type="hidden" name="currentName" id="currenNameInput">
+        <input type="hidden" name="currentEmail" id="currentEmailInput">
+
+        <!-- new values -->
+        <label for="name">Name</label><br>
+        <input name="newName" required><br><br>
+        <label for="email">Email</label><br>
+        <input name="newEmail" required><br><br>
+        <input type="submit" value="Save" onclick="closeEditModal()">
+      </form>
+    </div>
+  </div>
+   
+  <!-- ****End**** -->
+
+
 
   <script>
     // open and close add modal
@@ -112,7 +152,7 @@
     //end
 
     // open and close delete modal
-    function openDeleteModal(event, ){
+    function openDeleteModal(event){
       event.preventDefault(); //Prevents the link from navigating
       let deleteModal = document.querySelector(".deleteModal");
       deleteModal.style.display = "block";
@@ -124,11 +164,23 @@
     //end
 
      // open and close view modal
-    function openViewModal(event){
+    function openViewModal(event, student){
       event.preventDefault(); //Prevents the link from navigating
-      let viewModal = document.querySelector(".viewModal");
-      viewModal.style.display = "block";
+
+      let viewModal = document.getElementById("viewModal");
+      let viewContent = document.getElementById('viewContent');
+
+       //insert the content using innerHTML
+      viewContent.innerHTML = `
+        <p><strong>user_id:</strong> ${student.id} </P>
+        <p><strong>Name:</strong> ${student.name}</p>
+        <p><strong>Email:</strong> ${student.email}</p>
+      `
+
+      viewModal.style.display = 'block';
     }
+
+   
 
     function closeViewModal(){
       viewModal.style.display = "none";
@@ -148,6 +200,22 @@
       deleteModal.style.display = "block";
   }
 
+    //open and close edit modal
+    function openEditModal(event, student) {
+      event.preventDefault();
+
+      let editModal = document.getElementById("editModal");
+      editModal.style.display = "block";
+
+
+      // Set values for current values (add value attr through JS)
+      document.getElementById("currentNameInput").value = student.name;
+      document.getElementById("currentEmailInput").value = student.email;  
+    }
+
+    function closeEditModal(){
+      editModal.style.display = 'none';
+    }
   </script>
 
 </body>

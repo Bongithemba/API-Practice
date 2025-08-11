@@ -23,7 +23,7 @@ con.connect(function(err) {
 app.get("/", (req, res)=>{
    con.query("SELECT * FROM students", function (err, result, fields) {
     if (err) throw err;
-    console.log(result);
+    // console.log(result);
     res.render('index.ejs', {students: result}) // display in table form 
   });   
 });
@@ -40,14 +40,12 @@ app.post("/display", (req, res)=>{ // displays the entire table
   // res.sendStatus(200);
 })
 
-app.get("/idDisplay", (req, res)=>{ // display row of specific id
-    const id = req.query["id"];
-    console.log(id);
+app.post("/idDisplay", (req, res)=>{ // display row of specific id
+    const id = req.body["id"];
     con.query(`SELECT * FROM students WHERE id = '${id}'`, function (err, result) {
     if (err) throw err;
-    let data = JSON.stringify(result)
     console.log(result);
-    res.render('index.ejs', {content: data})
+    res.redirect('/')
     // res.sendStatus(200);
   });
 })
@@ -62,35 +60,56 @@ app.post("/add", (req, res)=>{ // add student to table
     res.redirect('/');
   });
 });
- 
+
+
 
 app.post("/update", (req, res)=>{ // update a student's details
-  let oldValue = req.body["oldValue"];
-  let newValue = req.body["newValue"];
-  let position = oldValue.search('@');
+  let currentName = req.body["currentName"];
+  let currentEmail = req.body["currentEmail"];
+  let newName = req.body["name"];
+  let newEmail = req.body["email"];
+
+
+  console.log(currentName);
+  console.log(currentEmail);
+  console.log(newName);
+  console.log(newEmail);
 
   let prop;
-  if (position != -1){
-    prop = 'email';
+  let newValue;
+  let oldValue;
+
+
+  if (currentName == newName){
+    newName = currentName;
   } else {
     prop = 'name';
+    newValue = newName;
+    oldValue = currentName;
   }
 
+ 
+  if (currentEmail == newEmail){
+    newEmail = currentEmail;
+  } else {
+    prop = 'email';
+    newValue = newEmail;
+    oldValue = currentEmail;
+  }
+ 
   let sql = `UPDATE students SET ${prop} = '${newValue}' WHERE ${prop} = '${oldValue}'`;
   con.query(sql, function (err, result) {
   if (err) throw err;
   console.log(result.affectedRows + " record(s) updated");
 });
-
-  res.sendStatus(200);
+  res.redirect('/');
 });
+
 
 
 app.post("/remove", (req, res)=>{ // delete a student's details
   let property = req.body["property"];
   let value = req.body["id-delete"];
-
-
   let sql = `DELETE FROM students WHERE ${property} = ${con.escape(value)}`;
   con.query(sql, function (err, result) {
   if (err) throw err;
