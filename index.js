@@ -66,8 +66,8 @@ app.post("/add", (req, res)=>{ // add student to table
 app.post("/update", (req, res)=>{ // update a student's details
   let currentName = req.body["currentName"];
   let currentEmail = req.body["currentEmail"];
-  let newName = req.body["name"];
-  let newEmail = req.body["email"];
+  let newName = req.body["newName"];
+  let newEmail = req.body["newEmail"];
 
 
   console.log(currentName);

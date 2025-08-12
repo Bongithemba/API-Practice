@@ -17,7 +17,7 @@
     </div>
     <form id="searchField" action="/idDisplay" method="POST">
       <input id="search" type="text" placeholder="search using ID" name="id">
-      <input type="submit" value="search">
+      <input id="searchbutton " type="submit" value="search">
     </form>
    
   <!-- ****Table**** -->
@@ -85,12 +85,12 @@
         <h2>Confirm Delete</h2>
       </div>
       <p id="deleteMessage">Are you sure you want to delete</p>
-      <div>
+      <div id="deleteModalButtons">
         <button onclick="closeDeleteModal()">Cancel</button>
         <form action="/remove" method="post" id="deleteform">
           <input type="hidden" name="property" value="name">
           <input type="hidden" name="id-delete" id="deleteValue">
-          <button type="submit" onclick="closeDeleteModal()">Delete</button>
+          <button id="deleteConfirmButton" type="submit" onclick="closeDeleteModal()">Delete</button>
         </form>
       </div>
     </div>
@@ -126,21 +126,22 @@
         <input type="hidden" name="currentEmail" id="currentEmailInput">
 
         <!-- new values -->
-        <label for="name">Name</label><br>
+        <label for="newName">Name</label><br>
         <input name="newName" required><br><br>
-        <label for="email">Email</label><br>
+        <label for="newEmail">Email</label><br>
         <input name="newEmail" required><br><br>
-        <input type="submit" value="Save" onclick="closeEditModal()">
+        <!-- Here I set closeEditModal in the submit button which was wrong-->
+        <input type="submit" value="Save" onclick="submitEditForm(event)"> 
       </form>
     </div>
   </div>
-   
+
   <!-- ****End**** -->
 
 
 
   <script>
-    // open and close add modal
+    // ******open and close add modal********
     function openAddModal(){
       let addModal = document.getElementById("addModal");
       addModal.style.display = "block";
@@ -158,12 +159,12 @@
       deleteModal.style.display = "block";
     }
 
-    function closeDeleteModal(){
-      deleteModal.style.display = "none";
-    }
-    //end
+    function closeEditModal(){
 
-     // open and close view modal
+    }
+    //*******end*********
+
+     // ******open and close view modal******
     function openViewModal(event, student){
       event.preventDefault(); //Prevents the link from navigating
 
@@ -180,12 +181,14 @@
       viewModal.style.display = 'block';
     }
 
-   
 
     function closeViewModal(){
       viewModal.style.display = "none";
     }
-    //end
+    //*******end*********
+
+
+    //*****Open and close delete modal******
 
     function openDeleteModal(event, name) {
       event.preventDefault();
@@ -200,7 +203,15 @@
       deleteModal.style.display = "block";
   }
 
-    //open and close edit modal
+    function closeDeleteModal(){
+      deleteModal.style.display = 'none';
+    }
+
+    //******End*******
+
+
+
+    //*****open and close edit modal*****
     function openEditModal(event, student) {
       event.preventDefault();
 
@@ -211,16 +222,36 @@
       // Set values for current values (add value attr through JS)
       document.getElementById("currentNameInput").value = student.name;
       document.getElementById("currentEmailInput").value = student.email;  
+
+      console.log("Setting currentName:", student.name);
+      console.log("Setting currentEmail:", student.email);
+    }
+
+      function submitEditForm(event){
+      event.preventDefault(); // Prevent default form submission
+      let editForm = document.getElementById("editForm");
+      editForm.submit(); // Manually submit the form
+      closeEditModal(); // Close modal after submission
     }
 
     function closeEditModal(){
       editModal.style.display = 'none';
     }
+
+    //*****End******
+
+
+    //make modal disappear by clicking outside of it
+    window.onclick = function(event){
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
   </script>
 
 </body>
 </html>
-
+ 
 
 
 

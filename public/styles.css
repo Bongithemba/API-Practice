@@ -16,10 +16,12 @@ table {
       margin-bottom: 30px;
     }
 
-th {
-      padding: 8px;
-      border: 1px solid #ddd;
-    }
+    th {
+          padding: 8px;
+          border: 1px solid #ddd;
+        }
+    
+
 
 
 .heading {
@@ -35,12 +37,14 @@ th {
 }
 
 #searchField {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 10px;  
     }
     #search {
-        margin-left: -350px;
-        
+        margin-left: -350px;  
+    }
+    #searchbutton {
+        width: 50px;
     }
 
 
@@ -175,4 +179,14 @@ th {
     padding-right: 20px;
     border: 1px solid rgba(10, 10, 10, 0.2);
 
+}
+
+#deleteModalButtons {
+  display: flex;
+  grid-template-columns: auto auto;
+}
+
+a {
+  color: black;
+  text-decoration: none;
 }
