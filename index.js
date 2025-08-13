@@ -50,61 +50,50 @@ app.post("/idDisplay", (req, res)=>{ // display row of specific id
   });
 })
 
-app.post("/add", (req, res)=>{ // add student to table
-    let name = req.body['name'];
-    let email = req.body['email']
-    let sql = `INSERT INTO students (name, email) VALUES ('${name}', '${email}')`;
-    con.query(sql, function (err, result) {
+app.post("/add", (req, res) => {
+  let name = req.body['name'];
+  let email = req.body['email'];
+  let phone = req.body['phone'] || null;
+  let dob = req.body['dob'] || null;
+
+  let sql = `INSERT INTO students (name, email, phone, dob) VALUES (?, ?, ?, ?)`;
+  con.query(sql, [name, email, phone, dob], function (err, result) {
     if (err) throw err;
     console.log("1 record inserted");
     res.redirect('/');
   });
 });
 
+app.post("/search", (req, res) => {
+  const uid = req.body.uid;
+
+  // Search for a student by UID
+  const sql = `SELECT * FROM students WHERE uid = ?`;
+  con.query(sql, [uid], function (err, result) {
+    if (err) throw err;
+
+    res.render("index.ejs", { students: result }); // Return filtered data
+  });
+});
 
 
-app.post("/update", (req, res)=>{ // update a student's details
-  let currentName = req.body["currentName"];
-  let currentEmail = req.body["currentEmail"];
+
+
+// code was only updating one field at a time, fixed using GPT.
+app.post("/update", (req, res) => {
+  let id = req.body["id"];
   let newName = req.body["newName"];
   let newEmail = req.body["newEmail"];
+  let newPhone = req.body["newPhone"];
+  let newDob = req.body["newDob"];
 
-
-  console.log(currentName);
-  console.log(currentEmail);
-  console.log(newName);
-  console.log(newEmail);
-
-  let prop;
-  let newValue;
-  let oldValue;
-
-
-  if (currentName == newName){
-    newName = currentName;
-  } else {
-    prop = 'name';
-    newValue = newName;
-    oldValue = currentName;
-  }
-
- 
-  if (currentEmail == newEmail){
-    newEmail = currentEmail;
-  } else {
-    prop = 'email';
-    newValue = newEmail;
-    oldValue = currentEmail;
-  }
- 
-  let sql = `UPDATE students SET ${prop} = '${newValue}' WHERE ${prop} = '${oldValue}'`;
-  con.query(sql, function (err, result) {
-  if (err) throw err;
-  console.log(result.affectedRows + " record(s) updated");
+  let sql = `UPDATE students SET name = ?, email = ?, phone = ?, dob = ? WHERE id = ?`;
+  con.query(sql, [newName, newEmail, newPhone, newDob, id], function (err, result) {
+    if (err) throw err;
+    console.log(result.affectedRows + " record(s) updated");
+    res.redirect('/');
+  });
 });
-  res.redirect('/');
-});
-
 
 
 app.post("/remove", (req, res)=>{ // delete a student's details

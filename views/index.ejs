@@ -1,257 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student management Interface</title>
-    <link href="styles.css" rel="stylesheet">
-    <style>
-    
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Management</title>
+  <link href="styles.css" rel="stylesheet">
 </head>
+
 <body>
-  <div class="container">
-    <div class="heading">
-      <h1>Student Management</h1>
-      <button id="newStudent" onclick="openAddModal()">Add New Student</button>
+
+<div class="container">
+  <div class="heading">
+    <h1>Student Management</h1>
+    <button id="addModal" class="addModal">Add New Student</button>
+  </div>
+
+ <form id="searchField" action="/search" method="POST">
+  <input type="text" name="uid" placeholder="🔍 Search by UID"/>
+  <button type="submit" style="display: none;"></button>
+</form>
+
+
+  <table>
+  <thead>
+    <tr>
+      <th>UID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% students.forEach(student => { %>
+      <tr>
+        <td><%= student.uid %></td>
+        <td><%= student.name %></td>
+        <td><%= student.email %></td>
+        <td>
+          <a href="#" onclick='openDetailsModal({
+            id: "<%= student.id %>",
+            name: "<%= student.name %>",
+            email: "<%= student.email %>",
+            phone: "<%= student.phone%>",
+            dob: "<%= student.dob %>"
+          })'>View</a>
+          <a href="#" onclick='openEditStudentModal("<%= student.id %>", "<%= student.name %>", "<%= student.email %>", "<%= student.phone %>", "<%= student.dob %>")'>Edit</a>
+          <a href="#" onclick='openDeleteModal("<%= student.uid %>", "<%= student.name %>")'>Delete</a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+</div>
+
+
+<!-- ****Modal: Student Details View (New Version)**** -->
+<div id="detailsModal" class="detailsModal" style="display: none;">
+  <div class="detailsModal-content">
+    <div class="modal-heading">
+      <h2>Student Details</h2>
+      <a href="#" onclick="closeDetailsModal(event)">Back List</a>
     </div>
-    <form id="searchField" action="/idDisplay" method="POST">
-      <input id="search" type="text" placeholder="search using ID" name="id">
-      <input id="searchbutton " type="submit" value="search">
+
+    <div class="modal-content">
+      <a href="#" onclick="closeDetailsModal(event)">Back to List</a>
+      <p><span class="label">ID:</span> <span id="detailsId">12648</span></p>
+      <p><span class="label">Name:</span> <span id="detailsName">Jom.Duxveem..owee</span></p>
+      <p><span class="label">Email:</span> <span id="detailsEmail">john.dosc@semple.com</span></p>
+      <p><span class="label">Phone:</span> <span id="detailsPhone">120.0557-338 (5400)</span></p>
+      <p><span class="label">DOB:</span> <span id="detailsDOB">107107275):2000</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- **** Modal: Add New Student **** -->
+<div id="addStudentModal" class="detailsModal" style="display: none;">
+  <div id="addStudentModalContent" class="detailsModal-content">
+    <div class="modal-heading">
+      <h2>Add New Student</h2>
+    </div>
+
+    <form action="/add" method="POST">
+      <p>
+        <label>Full Name</label><br />
+        <input type="text" name="name" required />
+      </p>
+      <p>
+        <label>Email</label><br />
+        <input type="email" name="email" required />
+      </p>
+      <p>
+        <label>Phone</label><br />
+        <input type="text" name="phone" />
+      </p>
+      <p>
+        <label>Date of Birth</label><br />
+        <input type="text" name="dob" />
+      </p>
+      <div style="text-align: right; margin-top: 20px;">
+        <button type="submit">Save</button>
+      </div>
     </form>
-   
-  <!-- ****Table**** -->
-    <table id="myTable">
-      <thead>
-        <tr>
-          <% if (students.length > 0) { %>
-            <% Object.keys(students[0]).slice(1).forEach(key => { %>
-              <th><%= key %></th>
-            <% }); %>
-          <% } %>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Table data will be inserted here -->
-        <% students.forEach(student => { %>
-          <tr>
-            <% Object.values(student).slice(1).forEach(value => { %>
-              <td id="data"><%= value %></td>
-            <% }); %>
-            <td id="options">
-              <span><a href="#" onclick="openViewModal(event, { 
-                    id: '<%= student.id %>',
-                    name: '<%= student.name %>',
-                    email: '<%= student.email %>'
-                })">View</a></span>
-              <span>
-                <a href="#" onclick="openEditModal(event, { 
-                    id: '<%= student.id %>',
-                    name: '<%= student.name %>',
-                    email: '<%= student.email %>'
-                })">Edit</a>
-              </span>
-              <span><a href="#" onclick="openDeleteModal(event, '<%=student.name %>')">Delete</a></span>
-            </td>
-          </tr>
-        <% }); %>
-      </tbody>
-    </table>
   </div>
-  <!-- ****End**** -->
-  
-  <!-- Modal to add new student -->
-  <div id="addModal" class="addModal">
-    <div class="addModal-content">
-      <div class="modal-heading">
-        <h2 >Add New Student</h2>
-    </div>
-      <form action="/add" method="post" id="addForm">
-        <label for="name">Name</label><br>
-        <input name="name" required><br><br>
-        <label for="email">Email</label><br>
-        <input name="email" required><br><br>
-        <input type="submit" value="Save" onclick="closeAddModal()">
-      </form>
-    </div>
-  </div>
-  <!-- ****End**** -->
+</div>
 
-  <!-- Modal to delete student -->
-  <div id="deleteModal" class="deleteModal">
-    <div class="deleteModal-content">
-      <div class="modal-heading">
-        <h2>Confirm Delete</h2>
+  <!-- **** Modal: Confirm Delete **** -->
+<!-- Confirm Delete Modal -->
+<div id="confirmDeleteModal" class="detailsModal" style="display: none;">
+  <div class="detailsModal-content">
+    <div class="modal-heading">
+      <h2>Confirm Delete</h2>
+    </div>
+    <p id="confirmDeleteText">Are you sure you want to delete this student?</p>
+
+    <form id="deleteForm" action="/remove" method="POST" style="text-align: right;">
+      <input type="hidden" name="property" value="uid" />
+      <input type="hidden" name="id-delete" id="deleteStudentId" />
+      <button type="button" onclick="closeDeleteModal()">Cancel</button>
+      <button type="submit" style="margin-left: 10px;"><strong>Delete</strong></button>
+    </form>
+  </div>
+</div>
+
+<!-- **** Modal: Edit Student **** -->
+<div id="editStudentModal" class="detailsModal" style="display: none;">
+  <div class="detailsModal-content">
+    <div class="modal-heading">
+      <h2>Edit Student</h2>
+    </div>
+
+    <form action="/update" method="POST">
+      <input type="hidden" name="id" id="editStudentId" />
+
+      <p>
+        <label>Full Name</label><br />
+        <input type="text" name="newName" id="editStudentName" required />
+      </p>
+
+      <p>
+        <label>Email</label><br />
+        <input type="email" name="newEmail" id="editStudentEmail" required />
+      </p>
+
+       <p>
+        <label>Phone</label><br />
+        <input type="text" name="newPhone" id="editStudentPhone" required />
+      </p>
+
+      <p>
+        <label>Date of Birth</label><br />
+        <input type="text" name="newDob" id="editDob" required/>
+      </p>
+
+      <div style="text-align: right; margin-top: 20px;">
+        <button type="submit"><strong>Save</strong></button>
       </div>
-      <p id="deleteMessage">Are you sure you want to delete</p>
-      <div id="deleteModalButtons">
-        <button onclick="closeDeleteModal()">Cancel</button>
-        <form action="/remove" method="post" id="deleteform">
-          <input type="hidden" name="property" value="name">
-          <input type="hidden" name="id-delete" id="deleteValue">
-          <button id="deleteConfirmButton" type="submit" onclick="closeDeleteModal()">Delete</button>
-        </form>
-      </div>
-    </div>
+    </form>
   </div>
-  <!-- ****End**** -->
-
-   <!-- Modal to view student details -->
-  <div id="viewModal" class="viewModal">
-    <div class="viewModal-content">
-      <div class="modal-heading">
-        <h2>Student Details</h2>
-        <span><a href='' onclick="closeViewModal(event)" class="close">Back to list</a></span>
-      </div>
-      <div id="viewContent">
-
-      </div>
-    </div>
-  </div>
-  <!-- ****End**** -->
-
-
-  <!-- ****Modal to edit student details**** -->
-   <div id="editModal" class="editModal">
-    <div class="editModal-content">
-      <div class="modal-heading">
-        <h2 >Edit Student Details</h2>
-    </div>
-      
-
-      <form action="/update" method="post" id="editForm">
-        <!-- current values *hidden* -->
-        <input type="hidden" name="currentName" id="currenNameInput">
-        <input type="hidden" name="currentEmail" id="currentEmailInput">
-
-        <!-- new values -->
-        <label for="newName">Name</label><br>
-        <input name="newName" required><br><br>
-        <label for="newEmail">Email</label><br>
-        <input name="newEmail" required><br><br>
-        <!-- Here I set closeEditModal in the submit button which was wrong-->
-        <input type="submit" value="Save" onclick="submitEditForm(event)"> 
-      </form>
-    </div>
-  </div>
-
-  <!-- ****End**** -->
+</div>
 
 
 
-  <script>
-    // ******open and close add modal********
-    function openAddModal(){
-      let addModal = document.getElementById("addModal");
-      addModal.style.display = "block";
-    };
 
-    function closeAddModal(){
-      addModal.style.display = "none";
-    };
-    //end
+<script>
+  //*****open and close details modal*****
+  function openDetailsModal(student) {
+  document.getElementById('detailsId').textContent = student.id;
+  document.getElementById('detailsName').textContent = student.name;
+  document.getElementById('detailsEmail').textContent = student.email;
+  document.getElementById('detailsPhone').textContent = student.phone || 'N/A';
+  document.getElementById('detailsDOB').textContent = student.dob || 'N/A';
 
-    // open and close delete modal
-    function openDeleteModal(event){
-      event.preventDefault(); //Prevents the link from navigating
-      let deleteModal = document.querySelector(".deleteModal");
-      deleteModal.style.display = "block";
-    }
+  document.getElementById('detailsModal').style.display = 'flex';
+}
 
-    function closeEditModal(){
-
-    }
-    //*******end*********
-
-     // ******open and close view modal******
-    function openViewModal(event, student){
-      event.preventDefault(); //Prevents the link from navigating
-
-      let viewModal = document.getElementById("viewModal");
-      let viewContent = document.getElementById('viewContent');
-
-       //insert the content using innerHTML
-      viewContent.innerHTML = `
-        <p><strong>user_id:</strong> ${student.id} </P>
-        <p><strong>Name:</strong> ${student.name}</p>
-        <p><strong>Email:</strong> ${student.email}</p>
-      `
-
-      viewModal.style.display = 'block';
-    }
+function closeDetailsModal(event) {
+  event.preventDefault();
+  document.getElementById('detailsModal').style.display = 'none';
+}
+//****end*******
 
 
-    function closeViewModal(){
-      viewModal.style.display = "none";
-    }
-    //*******end*********
+// ****Open "Add Student" modal******
+document.getElementById("addModal").addEventListener("click", () => {
+  document.getElementById("addStudentModal").style.display = "flex";
+});
 
 
-    //*****Open and close delete modal******
+function closeAddStudentModal(event) {
+  event.preventDefault();
+  document.getElementById("addStudentModal").style.display = "none";
+}
+//*****End******
 
-    function openDeleteModal(event, name) {
-      event.preventDefault();
 
-      let deleteModal = document.getElementById("deleteModal");
-      let deleteValueInput = document.getElementById("deleteValue");
-      let deleteMessage = document.getElementById("deleteMessage");
-
-      deleteValueInput.value = name;
-      deleteMessage.textContent = `Are you sure you want to delete "${name}"?`;
-
-      deleteModal.style.display = "block";
+//********open and close DeleteModal*******
+ function openDeleteModal(id, name) {
+    document.getElementById('deleteStudentId').value = id;
+    document.getElementById('confirmDeleteText').textContent =
+      `Are you sure you want to delete student "${name}"?`;
+    document.getElementById('confirmDeleteModal').style.display = 'flex';
   }
 
-    function closeDeleteModal(){
-      deleteModal.style.display = 'none';
-    }
-
-    //******End*******
-
+  function closeDeleteModal() {
+    document.getElementById('confirmDeleteModal').style.display = 'none';
+  }
+  //*******End**************
 
 
-    //*****open and close edit modal*****
-    function openEditModal(event, student) {
-      event.preventDefault();
+  //*****Open and close editModal*****
+  function openEditStudentModal(id, name, email, phone, dob) {
+    document.getElementById("editStudentId").value = id;
+    document.getElementById("editStudentName").value = name;
+    document.getElementById("editStudentEmail").value = email;
+    document.getElementById("editStudentPhone").value = phone;
+    document.getElementById("editDob").value = dob;
+    document.getElementById("editStudentModal").style.display = "flex";
+  }
 
-      let editModal = document.getElementById("editModal");
-      editModal.style.display = "block";
+  function closeEditStudentModal(event) {
+    event.preventDefault();
+    document.getElementById("editStudentModal").style.display = "none";
+  }
+  //*****end********
+ 
+  
 
+  const modal = document.querySelector('.detailsModal');
 
-      // Set values for current values (add value attr through JS)
-      document.getElementById("currentNameInput").value = student.name;
-      document.getElementById("currentEmailInput").value = student.email;  
+      window.onclick = function(event) {
+        // ... logic to close modal
+        modal.style.display = 'none';
+    };
 
-      console.log("Setting currentName:", student.name);
-      console.log("Setting currentEmail:", student.email);
-    }
+  
 
-      function submitEditForm(event){
-      event.preventDefault(); // Prevent default form submission
-      let editForm = document.getElementById("editForm");
-      editForm.submit(); // Manually submit the form
-      closeEditModal(); // Close modal after submission
-    }
-
-    function closeEditModal(){
-      editModal.style.display = 'none';
-    }
-
-    //*****End******
-
-
-    //make modal disappear by clicking outside of it
-    window.onclick = function(event){
-      if (event.target == modal) {
-        modal.style.display = "none";
+  window.onclick = function(event) {
+    if (event.target === modal) {
+        document.querySelector('.detailsModal').style.display = 'none'; // Or whatever method you use to hide your modal
       }
-    }
-  </script>
+    };
+</script>
 
 </body>
 </html>
- 
-
-
-
