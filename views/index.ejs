@@ -228,18 +228,18 @@ function closeAddStudentModal(event) {
 
   const modal = document.querySelector('.detailsModal');
 
-      window.onclick = function(event) {
-        // ... logic to close modal
-        modal.style.display = 'none';
-    };
+  // Add a click listener to close any modal when clicking outside of its content
+  window.addEventListener("click", function (event) {
+    // Select all modals
+    const modals = document.querySelectorAll(".detailsModal");
 
-  
-
-  window.onclick = function(event) {
-    if (event.target === modal) {
-        document.querySelector('.detailsModal').style.display = 'none'; // Or whatever method you use to hide your modal
+    modals.forEach((modal) => {
+      // If the click target *is* the modal background (not the content inside)
+      if (event.target === modal) {
+        modal.style.display = "none";
       }
-    };
+    });
+  });
 </script>
 
 </body>
