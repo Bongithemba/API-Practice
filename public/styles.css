@@ -1,196 +1,3 @@
-/* .container {
-    border: 2px solid black;
-    margin: auto auto;
-    width: 50%;
-    height: 100%;
-    text-align: center;
-    padding-top:20px;
-    margin-top: 50px;
-}
-
-
-table {
-      border-collapse: collapse;
-      width: 50%;
-      margin: auto auto;
-      margin-bottom: 30px;
-    }
-
-    th {
-          padding: 8px;
-          border: 1px solid #ddd;
-        }
-    
-
-
-
-.heading {
-    display: grid;
-    grid-template-columns: auto auto;
-    border-bottom: 2px solid black;
-}
-
-#newStudent {
-    height: 50px;
-    width: 150px;
-    grid-column-start: 4
-}
-
-#searchField {
-    margin-top: 20px;
-    margin-bottom: 10px;  
-    }
-    #search {
-        margin-left: -350px;  
-    }
-    #searchbutton {
-        width: 50px;
-    }
-
-
-.modal-heading {
-    border-bottom: 1px solid black;
-    margin-bottom: 20px;
-}
-
-Modal for adding a student
-.addModal {
-  display: none;  Hidden by default 
-  position: fixed;
-  z-index: 1;  Sit on top 
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto; * Enable scroll if needed *
-  background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity *
-}
-
-.addModal-content {
-  background-color: #fff;
-  margin: 15% auto;
-  padding: 20px;
-  width: 200px;
-  height: 300px;
-  max-width: 90%;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  position: relative;
-}
-* *****End****** *
-
-
-
-* Modal to delete a student *
-.deleteModal {
-  display: none; * Hidden by default *
-  position: fixed;
-  z-index: 1; * Sit on top *
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto; * Enable scroll if needed *
-  background-color: rgba(0, 0, 0, 0.5); * Black w/ opacity *
-}
-
-.deleteModal-content {
-  background-color: #fff;
-  margin: 15% auto;
-  padding: 20px;
-  width: 200px;
-  height: 200px;
-  max-width: 90%;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  position: relative;
-}
-* *****End***** *
-
-* Modal to delete a student *
-.viewModal {
-  display: none; * Hidden by default *
-  position: fixed;
-  z-index: 1; * Sit on top *
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto; * Enable scroll if needed *
-  background-color: rgba(0, 0, 0, 0.5); * Black w/ opacity *
-}
-
-.viewModal-content {
-  background-color: #fff;
-  margin: 15% auto;
-  padding: 20px;
-  width: 300px;
-  height: 200px;
-  max-width: 90%;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  position: relative;
-}
-
-.close {
-    color: black;
-    * float: right; *
-    position: fixed;
-    top: 320px;
-    right: 850px;
-    font-size: 12px;
-}
-* *****End***** *
-
-#data {
-    padding: 20px;
-    border: 1px solid #ddd;
-}
-
-*Modal for editing student details*
-.editModal {
-  display: none; * Hidden by default *
-  position: fixed;
-  z-index: 1; * Sit on top *
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto; * Enable scroll if needed *
-  background-color: rgba(0, 0, 0, 0.5); * Black w/ opacity *
-}
-
-.editModal-content {
-  background-color: #fff;
-  margin: 15% auto;
-  padding: 20px;
-  width: 250px;
-  height: 300px;
-  max-width: 90%;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  position: relative;
-}
-* *****End****** *
-
-#options {
-    display: grid;
-    grid-template-columns: 35px 35px 35px;
-    padding-right: 20px;
-    padding-bottom: 50px;
-    padding-top: 50px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border: 1px solid rgba(10, 10, 10, 0.2);
-
-}
-
-#deleteModalButtons {
-  display: flex;
-  grid-template-columns: auto auto;
-}
-
-a {
-  color: black;
-  text-decoration: none;
-} */
-
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
@@ -203,7 +10,7 @@ a {
       margin: auto;
     }
 
-    .heading {
+    .container .heading {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -241,7 +48,7 @@ a {
     }
 
    th, td {
-  padding: 8px;
+  padding: 13px;
   text-align: left;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
@@ -266,7 +73,6 @@ a {
     }
 
 
-
   .detailsModal {
   position: fixed;
   top: 0;
@@ -285,7 +91,7 @@ a {
 .detailsModal-content {
   background-color: #fff;
   width: 350px;
-  border: 3px solid #000;
+  border: 2px solid #000;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0,0,0,0.25);
 }
@@ -293,6 +99,24 @@ a {
 #addStudentModalContent {
   width: 200px !important;
 }
+
+#addStudentModalContent button {
+  margin-right: 25px;
+  height: 30px;
+  width: 50px;
+
+}
+
+#editStudentModalContent {
+  width: 200px;
+}
+
+#editStudentModalContent button {
+  margin-right: 25px;
+  height: 30px;
+  width: 50px;
+}
+
 
 .modal-heading {
   display: flex;

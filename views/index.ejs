@@ -15,8 +15,9 @@
     <button id="addModal" class="addModal">Add New Student</button>
   </div>
 
+
  <form id="searchField" action="/search" method="POST">
-  <input type="text" name="uid" placeholder="🔍 Search by UID"/>
+  <input type="text" name="uid" placeholder="🔍"/>
   <button type="submit" style="display: none;"></button>
 </form>
 
@@ -38,7 +39,6 @@
         <td><%= student.email %></td>
         <td>
           <a href="#" onclick='openDetailsModal({
-            id: "<%= student.id %>",
             name: "<%= student.name %>",
             email: "<%= student.email %>",
             phone: "<%= student.phone%>",
@@ -64,7 +64,6 @@
 
     <div class="modal-content">
       <a href="#" onclick="closeDetailsModal(event)">Back to List</a>
-      <p><span class="label">ID:</span> <span id="detailsId">12648</span></p>
       <p><span class="label">Name:</span> <span id="detailsName">Jom.Duxveem..owee</span></p>
       <p><span class="label">Email:</span> <span id="detailsEmail">john.dosc@semple.com</span></p>
       <p><span class="label">Phone:</span> <span id="detailsPhone">120.0557-338 (5400)</span></p>
@@ -98,7 +97,7 @@
         <input type="text" name="dob" />
       </p>
       <div style="text-align: right; margin-top: 20px;">
-        <button type="submit">Save</button>
+        <button type="submit"><strong>Save</strong></button>
       </div>
     </form>
   </div>
@@ -124,7 +123,7 @@
 
 <!-- **** Modal: Edit Student **** -->
 <div id="editStudentModal" class="detailsModal" style="display: none;">
-  <div class="detailsModal-content">
+  <div id="editStudentModalContent" class="detailsModal-content" >
     <div class="modal-heading">
       <h2>Edit Student</h2>
     </div>
@@ -165,7 +164,6 @@
 <script>
   //*****open and close details modal*****
   function openDetailsModal(student) {
-  document.getElementById('detailsId').textContent = student.id;
   document.getElementById('detailsName').textContent = student.name;
   document.getElementById('detailsEmail').textContent = student.email;
   document.getElementById('detailsPhone').textContent = student.phone || 'N/A';
