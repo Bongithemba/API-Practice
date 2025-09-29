@@ -10,24 +10,29 @@
       margin: auto;
     }
 
-    .container .heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      border-bottom: 1px solid black;
-      padding-bottom: 20px;
-    }
+  
 
-    .heading h1 {
+    #heading {
+      display: grid;
+      grid-template-columns: auto 160px;
+      border: 2px solid black;
+      width: 900px;
+      margin: auto;
+      padding: 20px;
+      border-bottom: white;
+    } 
+
+    #heading h1 {
       font-size: 24px;
       margin: 0;
+      width: 250px;
     }
 
-    .heading button {
+    #heading button {
       padding: 8px 12px;
       font-size: 14px;
       cursor: pointer;
+      width: 150px;
     }
 
     #searchField {
