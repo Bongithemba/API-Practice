@@ -1,19 +1,23 @@
 import express from "express";
-import mysql from "mysql";
+import mysql from "mysql2";
 import bodyParser from "body-parser";
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '/home/student/Desktop/API-Practice/.env'});
 
 const app = express();
 const port = 3000;
 const con = mysql.createConnection({ // configure the database connection
-  host: "localhost",
-  user: "root",
-  password: "Bong1Themb@",
-  database: "studentData"
+  host: process.env.host,
+  user: process.env.user,
+  password: process.env.password,
+  database: process.env.database
 });
+
 
 app.use(bodyParser.urlencoded({ extended:true }));// used for getting form data from client
 // app.use(bodyParser.json());// used for getting json data
-app.use(express.static("public"));
+app.use(express.static("public")); //Middleware for all static files in public directory
 
 con.connect(function(err) {
   if (err) throw err;
