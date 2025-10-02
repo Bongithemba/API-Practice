@@ -2,6 +2,7 @@ import express from "express";
 import mysql from "mysql2";
 import bodyParser from "body-parser";
 import dotenv from 'dotenv';
+import bcrypt from "bcrypt";
 
 dotenv.config({ path: '/home/student/Desktop/API-Practice/.env'});
 
@@ -24,13 +25,46 @@ con.connect(function(err) {
   console.log("Connected to database!");// Connects the server to the database
 })
 
-app.get("/", (req, res)=>{
-   con.query("SELECT * FROM students", function (err, result, fields) {
-    if (err) throw err;
-    // console.log(result);
-    res.render('index.ejs', {students: result}) // display in table form 
-  });   
-});
+// app.get("/", (req, res)=>{
+//    con.query("SELECT * FROM students", function (err, result, fields) {
+//     if (err) throw err;
+//     // console.log(result);
+//     res.render('index.ejs', {students: result});
+//   });   
+// });
+
+app.get("/", (req, res) => {
+  res.render("index.ejs")
+})
+
+
+app.post("/register", (req, res)=>{ // the registration page becomes the landing page
+	let name = req.body["fullname"];
+	let email = req.body["email"];
+	let password = req.body["password"];
+	let finalPassword = req.body["retypePassword"];
+	const saltRounds = 10;
+
+	if (password != finalPassword){
+		res.render("index.ejs", {message: "Passwords much match"});
+	}
+
+	else {
+		bcrypt.hash(finalPassword, saltRounds, function (err, hash) {
+    		if (err) {
+        	console.error(err);
+			return;
+    		}
+
+			let sql = `INSERT INTO studentCredentials (name, email, password, uuid) VALUES (?, ?, ?, GenerateUnique5DigitID())`;
+			con.query(sql, [name, email, hash], function (err, result){
+			if (err) throw err;
+			console.log("1 record inserted");
+			res.render('/login.ejs');
+			})
+		});
+	}
+})
   
 
 app.post("/display", (req, res)=>{ // displays the entire table

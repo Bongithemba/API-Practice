@@ -101,9 +101,9 @@
   box-shadow: 0 0 10px rgba(0,0,0,0.25);
 }
 
-#addStudentModalContent {
+/* #addStudentModalContent {
   width: 200px !important;
-}
+} */
 
 #addStudentModalContent button {
   margin-right: 25px;
