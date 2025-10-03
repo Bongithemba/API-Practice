@@ -25,16 +25,10 @@ con.connect(function(err) {
   console.log("Connected to database!");// Connects the server to the database
 })
 
-// app.get("/", (req, res)=>{
-//    con.query("SELECT * FROM students", function (err, result, fields) {
-//     if (err) throw err;
-//     // console.log(result);
-//     res.render('index.ejs', {students: result});
-//   });   
-// });
+
 
 app.get("/", (req, res) => {
-  res.render("index.ejs")
+  res.render("index.ejs");
 })
 
 
@@ -56,16 +50,45 @@ app.post("/register", (req, res)=>{ // the registration page becomes the landing
 			return;
     		}
 
-			let sql = `INSERT INTO studentCredentials (name, email, password, uuid) VALUES (?, ?, ?, GenerateUnique5DigitID())`;
+			let sql = `INSERT INTO users (name, email, password, uuid) VALUES (?, ?, ?, FLOOR(RAND() * 90000) + 10000)`;
 			con.query(sql, [name, email, hash], function (err, result){
 			if (err) throw err;
 			console.log("1 record inserted");
-			res.render('/login.ejs');
+			res.render('login.ejs');
 			})
 		});
 	}
+});
+
+app.post("/loginDetails", (req, res)=>{
+	let email = req.body['email'];
+	let password = req.body['password'];
+
+	con.query(`SELECT * FROM users WHERE email = '${email}'`, function (err, result) {
+    if (err) throw err;
+    console.log(result[0].password);
+
+	bcrypt.compare(password, result[0].password, function(err, result) {
+		if (err) throw err;
+		console.log(result);
+		if (result == false){
+			res.render('login.ejs', {message: "Incorrect Password!Try Again"})
+		} 
+    if (result == true){
+    con.query("SELECT * FROM students", function (err, result, fields) {
+    if (err) throw err;
+    // console.log(result);
+    res.render('dashboard.ejs', {students: result});
+    });   
+    }
+	});
+	});
 })
-  
+
+app.get("/login", (req, res) => {
+  res.render('login.ejs');
+})
+
 
 app.post("/display", (req, res)=>{ // displays the entire table
     let display = req.body;
@@ -73,7 +96,7 @@ app.post("/display", (req, res)=>{ // displays the entire table
     if (err) throw err;
     console.log(result);
     let data = JSON.stringify(result)
-    res.render('index.ejs', {content: data}) // display in table form
+    res.render('dashboard.ejs', {content: data}) // display in table form
   });
   // res.sendStatus(200);
 })
@@ -110,11 +133,9 @@ app.post("/search", (req, res) => {
   con.query(sql, [uid], function (err, result) {
     if (err) throw err;
 
-    res.render("index.ejs", { students: result }); // Return filtered data
+    res.render("dashboard.ejs", { students: result }); // Return filtered data
   });
 });
-
-
 
 
 // code was only updating one field at a time, fixed using GPT.
@@ -144,6 +165,10 @@ app.post("/remove", (req, res)=>{ // delete a student's details
   
   });
  res.redirect('/');
+})
+
+app.get("/logout", (req, res) =>{
+  res.render('index.ejs')
 })
 
 app.listen (port, ()=>{ // listening on port 3000
